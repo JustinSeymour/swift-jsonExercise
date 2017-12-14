@@ -9,6 +9,12 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    struct WebsiteDescription: Decodable {
+        let name: String
+        let description: String
+        let courses: [Course]
+    }
 
     struct Course: Decodable {
         let id: Int
@@ -27,7 +33,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let jsonUrlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
+        let jsonUrlString = "https://api.letsbuildthatapp.com/jsondecodable/website_description"
         guard let url = URL(string: jsonUrlString) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, response, err) in
@@ -36,8 +42,12 @@ class ViewController: UIViewController {
             
             
             do {
-                let course = try JSONDecoder().decode(Course.self, from: data)
-                print(course.name)
+                
+                let websiteDescription = try JSONDecoder().decode(WebsiteDescription.self, from: data)
+                print(websiteDescription.name, websiteDescription.description)
+                
+//                let courses = try JSONDecoder().decode([Course].self, from: data)
+//                print(courses)
             } catch let jsonErr {
                 
             }
